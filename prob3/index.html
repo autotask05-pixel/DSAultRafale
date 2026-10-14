@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkySaver Route Planner</title><link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header><div><span class="eyebrow">CSE DSA HACKATHON</span><h1>SkySaver</h1></div><p>Find the lowest-cost route with smart coupon use.</p></header>
+  <main>
+    <aside class="panel controls">
+      <h2>Plan a journey</h2>
+      <label>Maximum stops <input id="stops" type="number" min="0" value="2"></label>
+      <label>Coupons available <input id="coupons" type="number" min="0" value="2"></label>
+      <label>Flights <span class="hint">one per line: from, to, price</span><textarea id="flights">1,2,100
+1,3,250
+2,3,70
+2,4,190
+3,4,80
+3,5,210
+4,5,90
+2,5,400</textarea></label>
+      <div class="button-row"><button id="solve">Find best route</button><button id="generate" class="secondary">Generate graph (for random input) </button></div>
+      <label class="file-label">Import CSV <input id="csv" type="file" accept=".csv,text/csv"></label>
+      <button id="download" class="secondary" disabled>Download marked CSV</button>
+    </aside>
+    <section class="workspace">
+      <div class="panel result"><div><span class="eyebrow">OPTIMAL TOTAL</span><strong id="cost">—</strong></div><div id="summary">Enter flights and find a route.</div><button id="animate" disabled>Animate journey</button></div>
+      <div class="legend"><span><i class="start"></i> Start</span><span><i class="end"></i> Destination</span><span><i class="stop"></i> Route stop</span><span><i class="coupon"></i> Coupon flight</span></div>
+      <div id="graph" class="panel graph"><p class="empty">Your route map will appear here.</p></div>
+      <div id="journey" class="journey"></div>
+    </section>
+  </main><script src="app.js"></script>
+</body>
+</html>

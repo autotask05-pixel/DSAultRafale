@@ -2,28 +2,15 @@
 
 Exam timetable scheduling with conflict and hall-capacity constraints. Includes a Streamlit application and a command-line solver.
 
-## Run the application
+## Images
+<img width="1917" height="990" alt="Screenshot 2026-10-14 112414" src="https://github.com/user-attachments/assets/47591713-7585-4c41-b132-c824a150c250" />
+<img width="1903" height="892" alt="Screenshot 2026-10-14 112255" src="https://github.com/user-attachments/assets/4110068e-231b-4dfc-ada6-a4add8541f9b" />
+<img width="1912" height="916" alt="Screenshot 2026-10-14 112015" src="https://github.com/user-attachments/assets/433e576b-869a-4044-a47c-28b821deabd0" />
+<img width="1903" height="913" alt="Screenshot 2026-10-14 112007" src="https://github.com/user-attachments/assets/9c67315f-dea2-4750-802d-961b73ec12bf" />
+<img width="1907" height="921" alt="Screenshot 2026-10-14 111925" src="https://github.com/user-attachments/assets/eb49f57b-0522-4f7d-9461-b5757d2151ba" />
+<img width="1902" height="915" alt="Screenshot 2026-10-14 111915" src="https://github.com/user-attachments/assets/470e6a6a-b110-4b1f-8041-251e651efd44" />
+<img width="1907" height="921" alt="Screenshot 2026-10-14 111947" src="https://github.com/user-attachments/assets/fe4be231-a217-4477-bae6-ee9a479e18f3" />
 
-Requires Python 3.10 or later.
-
-```bash
-python -m pip install -r requirements.txt
-python run.py
-```
-
-Open **http://localhost:8501**. Alternatively: `python -m streamlit run app.py`.
-
-For a reproducible Windows setup, use a local virtual environment:
-
-```powershell
-python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-python run.py
-```
-
-The launcher automatically prefers `.venv` when present. On macOS/Linux, use `.venv/bin/python` in place of `.venv\Scripts\python.exe`.
-
-The interface uses Streamlit and Plotly. The scheduling engine uses the Python standard library.
 
 ## Features
 

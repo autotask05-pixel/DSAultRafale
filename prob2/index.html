@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Problem 2 — Closest Pair of Points Comparative Analysis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="title-group">
+      <h1>Problem 2: Closest Pair of Points Comparative Analysis</h1>
+      <p>Empirical & algorithmic comparison: O(N²) Brute-Force vs. O(N log N) Divide-and-Conquer</p>
+    </div>
+    <div class="tag">Comparative Analysis Engine</div>
+  </header>
+
+  <!-- Input & Corner Cases Controls -->
+  <section class="card">
+    <div class="controls-grid">
+      <div class="field-group">
+        <label for="inputN">Input N (Points)</label>
+        <input type="number" id="inputN" value="16" min="0" max="2000" step="1">
+      </div>
+
+      <div class="field-group">
+        <label for="cornerCaseSelector">Point Distribution / Corner Cases</label>
+        <select id="cornerCaseSelector">
+          <option value="random-int">Random Integer Coordinates</option>
+          <option value="random-float">Random Floating-Point Coordinates</option>
+          <option value="corner-duplicates">Corner Case: Duplicate Points (Distance = 0.000000)</option>
+          <option value="corner-collinear-x">Corner Case: Collinear Points on same X (Vertical)</option>
+          <option value="corner-collinear-y">Corner Case: Collinear Points on same Y (Horizontal)</option>
+          <option value="corner-n2">Corner Case: Exact N = 2 (Smallest Valid Pair)</option>
+          <option value="corner-n1">Corner Case: N = 1 (N &lt; 2 Underflow)</option>
+          <option value="corner-n0">Corner Case: N = 0 (Empty Set)</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="coordRange">Coordinate Range</label>
+        <select id="coordRange">
+          <option value="100">[-100, 100]</option>
+          <option value="500">[-500, 500]</option>
+          <option value="1000">[-1000, 1000]</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label>Action</label>
+        <button class="btn-primary" id="btnRun">Run Comparison</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" id="btnGenOnly">↻ Re-Generate Random Set</button>
+      <button class="btn-secondary" id="btnStepAnim">▶ Play Recursion Animation</button>
+      <button class="btn-purple" id="btnRunBench">⚡ Plot Running Time vs N Graph</button>
+    </div>
+  </section>
+
+  <!-- Standard Format Output Terminal Box -->
+  <section class="output-box" id="stdOutputBox">
+    <div><span class="line-label">First line (Brute-Force)           : </span><span id="bfOut" class="val-bf">Awaiting execution...</span></div>
+    <div><span class="line-label">Second line (Divide-and-Conquer)  : </span><span id="dcOut" class="val-dc">Awaiting execution...</span></div>
+    <div><span class="line-label">Third line (Execution times)       : </span><span id="timeOut" class="val-time">Awaiting execution...</span></div>
+  </section>
+
+  <!-- Visualizer & Live Step Inspector -->
+  <section class="viz-grid">
+    <!-- Visualizer Canvas & Animation Bar -->
+    <div class="card">
+      <div class="panel-header-inline">
+        <strong style="font-size:14px;">Plane Plot & Divide-and-Conquer Regions</strong>
+        <span id="statusBadge" class="anim-badge status-badge-pill">Ready</span>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="plane"></canvas>
+      </div>
+
+      <!-- Animation Bar -->
+      <div class="anim-bar">
+        <button class="btn-secondary" id="btnPrevStep" style="padding:4px 10px;">◀</button>
+        <button class="btn-primary" id="btnPlayPause" style="padding:4px 12px;">Play</button>
+        <button class="btn-secondary" id="btnNextStep" style="padding:4px 10px;">▶</button>
+        <input type="range" id="animScrubber" min="0" max="0" value="0">
+        <span class="anim-badge" id="stepCounter">0 / 0</span>
+      </div>
+
+      <!-- Color Legend -->
+      <div class="legend-row">
+        <div class="legend-item"><span class="color-dot" style="background:#1e293b;"></span> Points</div>
+        <div class="legend-item"><span class="color-bar" style="background:var(--bf-color);"></span> Brute Force Pair</div>
+        <div class="legend-item"><span class="color-bar" style="background:var(--dc-color);"></span> D&amp;C Pair</div>
+        <div class="legend-item"><span class="color-bar" style="background:var(--pair-color);height:4px;"></span> Final Closest Pair</div>
+        <div class="legend-item"><span class="color-bar" style="background:var(--split-line);"></span> Dividing Line (x_mid)</div>
+        <div class="legend-item"><span class="color-dot" style="background:var(--strip-stroke);border:1px solid #d97706;"></span> Strip Region (2d)</div>
+        <div class="legend-item"><span class="color-bar" style="background:var(--candidate-line);"></span> Strip Comparison</div>
+      </div>
+    </div>
+
+    <!-- Live Execution Telemetry -->
+    <div class="card telemetry-card">
+      <strong style="font-size:14px;">Active Divide-and-Conquer Step Inspector</strong>
+
+      <div class="step-narrative-box" id="stepNarrative">
+        Click "Run Comparison" or step through the animation to inspect active recursion state, bounding strip, and candidates.
+      </div>
+
+      <table class="live-stats-table">
+        <tbody>
+          <tr>
+            <td>Algorithm State</td>
+            <td id="livePhase">Idle</td>
+          </tr>
+          <tr>
+            <td>Active Subproblem Size</td>
+            <td id="liveSubN">0 points</td>
+          </tr>
+          <tr>
+            <td>Dividing Line (x_mid)</td>
+            <td id="liveSplitX">—</td>
+          </tr>
+          <tr>
+            <td>Current Best Distance (δ)</td>
+            <td id="liveDelta">—</td>
+          </tr>
+          <tr>
+            <td>Strip Bounding Range [x_mid ± δ]</td>
+            <td id="liveStripRange">—</td>
+          </tr>
+          <tr>
+            <td>Points within Strip</td>
+            <td id="liveStripCount">0 points</td>
+          </tr>
+          <tr>
+            <td>Active Candidate Pair Test</td>
+            <td id="livePairTest" style="color:var(--candidate-line);">None</td>
+          </tr>
+          <tr>
+            <td>Total Strip Distance Checks</td>
+            <td id="liveOpsTotal">0</td>
+          </tr>
+          <tr>
+            <td>Agreement Status</td>
+            <td id="liveAgreement" style="color:var(--pair-color);">—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="coord-display-box" id="hoverCoordBox">
+        Hover over points on the plane to view exact (x, y) coordinates.
+      </div>
+    </div>
+  </section>
+
+  <!-- Running-Time vs N Performance Graph -->
+  <section class="card chart-card">
+    <div class="chart-head">
+      <div>
+        <strong style="font-size:15px;">Running-Time vs. N Graph (Empirical Benchmark)</strong>
+        <div style="font-size:12px;color:var(--text-muted);">Compares O(N²) quadratic scaling vs O(N log N) divide-and-conquer runtime</div>
+      </div>
+      <div class="chart-legend-wrap">
+        <span class="legend-item"><span class="color-dot" style="background:var(--bf-color);"></span> Brute-Force O(N²)</span>
+        <span class="legend-item"><span class="color-dot" style="background:var(--dc-color);"></span> Divide &amp; Conquer O(N log N)</span>
+      </div>
+    </div>
+
+    <div class="chart-canvas-wrap">
+      <canvas id="timeChart"></canvas>
+    </div>
+  </section>
+
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
